@@ -45,6 +45,11 @@ jobs:
           ref: ${{ inputs.branch }}
           token: ${{ secrets.github_token }}
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.12.25
+
       - name: Terraform Workspace
         id: workspace
         run: terraform workspace select ${{inputs.workspace}}
