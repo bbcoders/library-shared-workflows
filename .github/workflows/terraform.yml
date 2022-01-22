@@ -1,8 +1,8 @@
 name: Terraform Shared Library
 
 on:
-    work_flow:
-       inputs:
+  workflow_call:
+      inputs:
         repository:
           required: true
           type: string
@@ -66,28 +66,30 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.access_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.secret_key }}
-        id: plan
-        if: github.event_name == 'pull_request'
-        run: terraform plan -no-color
-        continue-on-error: true
+      # - name: Terraform Plan
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.access_key }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.secret_key }}
+      #   id: plan
+      #   if: github.event_name == 'pull_request'
+      #   run: terraform plan -no-color
+      #   continue-on-error: true
 
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+      # - name: Terraform Plan Status
+      #   if: steps.plan.outcome == 'failure'
+      #   run: exit 1
+        
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      #   run: terraform apply -auto-approve
 
-       - name: Terraform Apply
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+      # - name: Commit Terraform state changes
+      #   if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      #   run: |
+      #      echo "Commiting state changes"
+      #      git config --global user.name ${{ inputs.commit_username}}
+      #      git config --global user.email ${{ inputs.commit_email}}
+      #      git commit -am ${{ inputs.commit_message}}
+      #      git push
 
-      - name: Commit Terraform state changes
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: |
-           echo "Commiting state changes"
-           git config --global user.name ${{ inputs.commit_username}}
-           git config --global user.email ${{ inputs.commit_email}}
-           git commit -am ${{ inputs.commit_message}}
-           git push
+  
