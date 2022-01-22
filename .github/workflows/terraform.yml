@@ -43,7 +43,7 @@ jobs:
         with:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.branch }}
-          token: ${{ secrets.github_token }}
+          token: ${{ secrets.github_pat }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
