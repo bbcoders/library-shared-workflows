@@ -50,10 +50,6 @@ jobs:
         with:
           terraform_version: 0.12.25
 
-      - name: Terraform Workspace
-        id: workspace
-        run: terraform workspace select ${{inputs.workspace}}
-
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
@@ -61,6 +57,10 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+      
+      - name: Terraform Workspace
+        id: workspace
+        run: terraform workspace select ${{inputs.workspace}}
 
       - name: Terraform Validate
         id: validate
